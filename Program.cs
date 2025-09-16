@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MyShop.Models;
+using MyShop.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +10,14 @@ builder.Services.AddDbContext<ItemDbContext>(options => {
         builder.Configuration["ConnectionStrings:ItemDbContextConnection"]);
 });
 
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    DBInit.Seed(app);
 }
 
 app.UseStaticFiles();
